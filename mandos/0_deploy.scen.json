@@ -1,0 +1,67 @@
+{
+    "name": "multi-sender",
+    "steps": [
+        {
+            "step": "setState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "0"
+                },
+                "address:user1": {
+                    "nonce": "0",
+                    "balance": "100,000",
+                    "esdt": {
+                        "str:FUNGIBLE-ABCDEF": "500,000",
+                        "str:NFT-123DEF": {
+                            "instances": [
+                                {
+                                    "nonce": "1",
+                                    "balance": "1"
+                                },
+                                {
+                                    "nonce": "2",
+                                    "balance": "1"
+                                }
+                            ]
+                        }
+                        
+                    }
+                },
+                "address:user2": {
+                    "nonce": "0",
+                    "balance": "0"
+                },
+                "address:user3": {
+                    "nonce": "0",
+                    "balance": "0"
+                }
+            },
+            "newAddresses": [
+                {
+                    "creatorAddress": "address:owner",
+                    "creatorNonce": "1",
+                    "newAddress": "sc:multi-sender"
+                }
+            ]
+        },
+        {
+            "step": "scDeploy",
+            "txId": "deploy",
+            "tx": {
+                "from": "address:owner",
+                "contractCode": "file:../output/multi-sender.wasm",
+                "arguments": [],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "logs": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        }
+    ]
+}

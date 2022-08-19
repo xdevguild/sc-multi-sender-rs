@@ -1,0 +1,79 @@
+{
+    "name": "multi send egld",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "0_deploy.scen.json"
+        },
+        {
+            "step": "scCall", 
+            "txId": "user 1 send 100 fungible esdt token to user 2 and 200 fungible esdt token to user 3",
+            "tx": {
+                "from": "address:user1",
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:FUNGIBLE-ABCDEF",
+                        "nonce": "0",
+                        "value": "300"
+                    }
+                ],    
+                "to": "sc:multi-sender",
+                "function": "multiSendEsdt",
+                "arguments": [
+                    "str:FUNGIBLE-ABCDEF",
+                    "address:user2", "100",
+                    "address:user3", "200"
+                ],
+                "gasLimit": "3,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "status": "", 
+                "message": "",
+                "out": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:user1": {
+                    "nonce": "*",
+                    "balance": "100,000",
+                    "esdt": {
+                        "str:FUNGIBLE-ABCDEF": "499,700",
+                        "str:NFT-123DEF": {
+                            "instances": [
+                                {
+                                    "nonce": "1",
+                                    "balance": "1"
+                                },
+                                {
+                                    "nonce": "2",
+                                    "balance": "1"
+                                }
+                            ]
+                        }
+                        
+                    }
+                },
+                "address:user2": {
+                    "nonce": "0",
+                    "balance": "0",
+                    "esdt": {
+                        "str:FUNGIBLE-ABCDEF": "100"
+                    }
+                },
+                "address:user3": {
+                    "nonce": "0",
+                    "balance": "0",
+                    "esdt": {
+                        "str:FUNGIBLE-ABCDEF": "200"
+                    }
+                },
+                "+": "*"
+            }
+        }
+    ]
+}

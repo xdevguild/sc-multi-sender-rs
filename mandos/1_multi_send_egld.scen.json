@@ -1,0 +1,66 @@
+{
+    "name": "multi send egld",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "0_deploy.scen.json"
+        },
+        {
+            "step": "scCall", 
+            "txId": "user 1 send 10 egld to user 2 and 20 egld to user 3",
+            "tx": {
+                "from": "address:user1",
+                "egldValue": "30",
+                "to": "sc:multi-sender",
+                "function": "multiSendEgld",
+                "arguments": [
+                    "address:user2", "10",
+                    "address:user3", "20"
+                ],
+                "gasLimit": "2,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "status": "", 
+                "message": "",
+                "out": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:user1": {
+                    "nonce": "*",
+                    "balance": "99,970",
+                    "esdt": {
+                        "str:FUNGIBLE-ABCDEF": "500,000",
+                        "str:NFT-123DEF": {
+                            "instances": [
+                                {
+                                    "nonce": "1",
+                                    "balance": "1"
+                                },
+                                {
+                                    "nonce": "2",
+                                    "balance": "1"
+                                }
+                            ]
+                        }
+                        
+                    }
+                },
+                "address:user2": {
+                    "nonce": "0",
+                    "balance": "10"
+                },
+                "address:user3": {
+                    "nonce": "0",
+                    "balance": "20"
+                },
+                "+": "*"
+            }
+        }
+    ]
+}

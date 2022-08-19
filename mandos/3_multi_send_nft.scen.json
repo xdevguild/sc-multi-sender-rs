@@ -1,0 +1,86 @@
+{
+    "name": "multi send nft",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "0_deploy.scen.json"
+        },
+        {
+            "step": "scCall", 
+            "txId": "user 1 send a nft to user 2 & 3",
+            "tx": {
+                "from": "address:user1",
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:NFT-123DEF",
+                        "nonce": "1",
+                        "value": "1"
+                    },
+                    {
+                        "tokenIdentifier": "str:NFT-123DEF",
+                        "nonce": "2",
+                        "value": "1"
+                    }
+                ],    
+                "to": "sc:multi-sender",
+                "function": "multiSendNft",
+                "arguments": [
+                    "str:NFT-123DEF",
+                    "address:user2", "1",
+                    "address:user3", "2"
+                ],
+                "gasLimit": "4,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "status": "", 
+                "message": "",
+                "out": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:user1": {
+                    "nonce": "*",
+                    "balance": "100,000",
+                    "esdt": {
+                        "str:FUNGIBLE-ABCDEF": "500,000"
+                        
+                    }
+                },
+                "address:user2": {
+                    "nonce": "0",
+                    "balance": "0",
+                    "esdt": {
+                        "str:NFT-123DEF": {
+                            "instances": [
+                                {
+                                    "nonce": "1",
+                                    "balance": "1"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "address:user3": {
+                    "nonce": "0",
+                    "balance": "0",
+                    "esdt": {
+                        "str:NFT-123DEF": {
+                            "instances": [
+                                {
+                                    "nonce": "2",
+                                    "balance": "1"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "+": "*"
+            }
+        }
+    ]
+}
