@@ -3,7 +3,7 @@ CHAIN="D"
 OWNER="../../wallet-owner.pem" # Change for your PEM
 CONTRACT="output/multi-sender.wasm"
 
-SC_ADDRESS="erd1qqqqqqqqqqqqqpgqllh2w5mjfr5rapw7eptsxmnx36a3fpdqnqjsw3gexy" # Add your SC Address
+SC_ADDRESS="erd1qqqqqqqqqqqqqpgqwpaz4datn4rxuhfsuc29xulc3m7fyucanqjsmkk5fu" # Add your SC Address
 
 deploy() {
     erdpy --verbose contract deploy --bytecode="$CONTRACT" --recall-nonce \
@@ -39,7 +39,6 @@ multiSendEgld() {
         --send || return
 }
 
-
 multiSendEsdt() {
     token_id=str:RIDE-6e4c49 # the token id you want to send 
     amount=20000000 # the total amount to send
@@ -58,8 +57,8 @@ multiSendNft() {
     user_address=$(erdpy wallet pem-address ${OWNER}) # Your address
     number_of_token_to_send=02 # Number of NFTs you want to transfer
     collection_id=str:XGUARDIAN-abfbee # The NFT collection ID you want to send
-    nonce_1=0x0a6d # The nonce of the first NFT you want to send
-    nonce_2=0x0a6e # The nonce of the second NFT you want to send
+    nonce_1=0x0a70 # The nonce of the first NFT you want to send
+    nonce_2=0x0a71 # The nonce of the second NFT you want to send
     method_name=str:multiSendNft
 
         erdpy --verbose contract call ${user_address} --recall-nonce \
@@ -77,5 +76,9 @@ multiSendNft() {
                     $NFT_AMOUNT \
                     $method_name \
                     $collection_id \
+                    $ADDRESS_1 \
+                    $nonce_1 \
+                    $ADDRESS_2 \
+                    $nonce_2 \
         --send || return
 }
