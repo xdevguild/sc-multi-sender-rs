@@ -9,7 +9,10 @@ pub trait MultiSenderContract {
 
     #[payable("EGLD")]
     #[endpoint(multiSendEgld)]
-    fn multi_send_egld(&self, args: MultiValueEncoded<MultiValue2<ManagedAddress, BigUint>>) {
+    fn multi_send_egld(
+        &self,
+        args: MultiValueEncoded<MultiValue2<ManagedAddress, BigUint>>
+    ) {
         let payment_amount = self.call_value().egld_value();
         let mut amount_to_send = BigUint::zero();
 
@@ -58,6 +61,7 @@ pub trait MultiSenderContract {
             require!(payment.token_identifier == collection_id, "Invalid token id");
             require!(payment.amount == 1, "Invalid amount");
         }
+        require!(args.len() == payments.len(), "The number of payments must be equal to the number of addresses that will receive");
 
         for arg in args.into_iter() {
             let (receiver, nonce) = arg.into_tuple();
