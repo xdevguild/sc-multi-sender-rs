@@ -1,5 +1,5 @@
 {
-    "name": "multi send egld",
+    "name": "multi send esdt",
     "steps": [
         {
             "step": "externalSteps",
