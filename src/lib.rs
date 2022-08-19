@@ -42,4 +42,27 @@ pub trait MultiSenderContract {
         }
         require!(payment.amount == amount_to_send, "Invalid amount");
     }
+
+    // It only supports NFT.
+    #[payable("*")]
+    #[endpoint(multiSendNft)]
+    fn multi_send_nft(
+        &self,
+        collection_id: TokenIdentifier,
+        args: MultiValueEncoded<MultiValue2<ManagedAddress, u64>>
+    ) {
+        let payments = self.call_value().all_esdt_transfers();
+        require!(!payments.is_empty(), "No payments");
+
+        for payment in &payments {
+            require!(payment.token_identifier == collection_id, "Invalid token id");
+            require!(payment.amount == 1, "Invalid amount");
+        }
+
+        for arg in args.into_iter() {
+            let (receiver, nonce) = arg.into_tuple();
+
+            self.send().direct_esdt(&receiver, &collection_id, nonce, &BigUint::from(1u64));
+        }
+    }
 }
