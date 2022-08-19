@@ -8,6 +8,7 @@ elrond_wasm_node::wasm_endpoints! {
     multi_sender
     (
         multiSendEgld
+        multiSendEsdt
     )
 }
 
